@@ -15,13 +15,12 @@ public class Card : MonoBehaviour
     private int cardLevel;
 
     private string cardName;
-    private string cardDescription;
+    private string cardDescription = "";
 
     private CardFunction cardFunction;//this describes what this card does
 
     private float timer;
     private float tickTime;//time to complete the cardFunction
-    private Resource tickTimeModifier;
 
     //variables for addResources()
     private KeyValuePair<Resource, int> resourceAddOutput;
@@ -78,17 +77,20 @@ public class Card : MonoBehaviour
         {
             if (i == 0)
             {
-                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(1.5f, (float)_cardLevel * 0.25f) * Random.Range(20, 30)));//this should be changed to balance the price of the card with it's level
+                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(1.5f, (float)cardLevel * 0.25f) * Random.Range(20, 30)));//this should be changed to balance the price of the card with it's level
             }
             else
             {
                 Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(CardFunction)).Length - 1); //the 1 at the beginning of random.range is to exclude Click as a resource and the - 1 at the end is to exclude None
-                purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(1.5f, (float)_cardLevel * 0.25f) * Random.Range(20, 30)));
+                purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(1.5f, (float)cardLevel * 0.25f) * Random.Range(20, 30)));
             }
         }
         
         //setting the card's function
         cardFunction = (CardFunction)Random.Range(0, CardFunction.GetNames(typeof(CardFunction)).Length);//assigning a random enum from CardFunction to cardFunction
+
+        //setting the time it takes to complete one tick of the card's function.
+        tickTime = Random.Range(10, 50) / cardLevel;
 
         //setting the values for the card's functions (I'm setting even the ones I'm not using for reasons I can't remember)
 
@@ -102,6 +104,17 @@ public class Card : MonoBehaviour
         for (int i = 0; i < resourceConvertInputNumber; i++)
         {
             resourceConvertInput.Add((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));
+        }
+
+        //setting the description
+        switch (cardFunction)
+        {
+            case CardFunction.addResource:
+                cardDescription = "Adds " + resourceAddOutput.Value.ToString() + " " + resourceAddOutput.Key.ToString() + "s every " + tickTime.ToString() + " seconds.";
+                break;
+            case CardFunction.convertResources:
+                cardDescription = "Converts ";
+                break;
         }
     }
 
