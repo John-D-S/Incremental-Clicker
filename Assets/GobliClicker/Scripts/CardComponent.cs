@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CardComponent : MonoBehaviour
 {
+    private Card card;
+    
     private int level;
     public int Level
     {
@@ -18,7 +20,6 @@ public class CardComponent : MonoBehaviour
         }
     }
 
-    private Card card;
     // Start is called before the first frame update
     void Start()
     {

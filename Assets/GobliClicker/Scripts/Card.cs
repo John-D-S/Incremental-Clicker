@@ -76,7 +76,25 @@ public class Card
                 cardDescription = "Adds " + resourceAddOutput.Value.ToString() + " " + resourceAddOutput.Key.ToString() + "s every " + tickTime.ToString() + " seconds.";
                 break;
             case CardFunction.ConvertResources:
+                int i = 0;
                 cardDescription = "Converts ";
+                foreach (KeyValuePair<Resource, int> InputItem in resourceConvertInput)
+                {
+                    if (i == 0)
+                    {
+                        cardDescription += $"{InputItem.Value} {InputItem.Key}";
+                    }
+                    else if (i < resourceConvertInput.Count - 1)
+                    {
+                        cardDescription += $", {InputItem.Value} {InputItem.Key}";
+                    }
+                    else if (i == resourceConvertInput.Count - 1)
+                    {
+                        cardDescription += $" and {InputItem.Value} {InputItem.Key}";
+                    }
+                }
+                cardDescription += $" into {resourceConvertOutput.Value} {resourceConvertOutput.Key}.";
+
                 break;
         }
     }
@@ -92,7 +110,6 @@ public class Card
             return Power(value, power - 1, value * value);
         }
     }
-    
     private float Power(float originalValue, float power, float currentValue)
     {
         if (power <= 1)
@@ -101,7 +118,7 @@ public class Card
         }
         else
         {
-            return Power(currentValue * originalValue, power - 1);
+            return Power(originalValue, power - 1, currentValue * originalValue);
         }
     }
 
@@ -133,7 +150,7 @@ public class Card
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void UpdateCard()
     {
         if (active)
         {
