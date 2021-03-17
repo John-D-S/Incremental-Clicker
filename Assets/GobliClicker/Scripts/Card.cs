@@ -4,11 +4,11 @@ using UnityEngine;
 
 public enum CardFunction
 {
-    addResource,
-    convertResources
+    AddResource,
+    ConvertResources
 }
 
-public class Card : MonoBehaviour
+public class Card
 {
     private bool active = false;//the card is inactive before being purchased
     private Dictionary<Resource, int> purchaseCost; //the resources and the number of them that it costs to purchase this card.
@@ -29,44 +29,7 @@ public class Card : MonoBehaviour
     private Dictionary<Resource, int> resourceConvertInput;
     private KeyValuePair<Resource, int> resourceConvertOutput;
 
-    private float Power(float value, float power)
-    {
-        if (power <= 1)
-        {
-            return value;
-        }
-        else
-        {
-            return Power(value, power - 1, value * value);
-        }
-    }
-    private float Power(float originalValue, float power, float currentValue)
-    {
-        if (power <= 1)
-        {
-            return currentValue;
-        }
-        else
-        {
-            return Power(currentValue * originalValue, power - 1);
-        }
-    }
-
-    private void AddResources()
-    {
-        Counter.AddResource(resourceAddOutput.Key, resourceAddOutput.Value);
-    }
-
-    private void ConvertResources()
-    {
-        foreach (KeyValuePair<Resource, int> resourceInput in resourceConvertInput)
-        {
-            Counter.AddResource(resourceInput.Key, resourceInput.Value);
-        }
-        Counter.AddResource(resourceConvertOutput.Key, resourceConvertOutput.Value);
-    }
-
-    private void InitializeInShop(int _cardLevel)
+    public Card(int _cardLevel)
     {
         //setting the card's cardLevel
         cardLevel = _cardLevel;
@@ -109,23 +72,61 @@ public class Card : MonoBehaviour
         //setting the description
         switch (cardFunction)
         {
-            case CardFunction.addResource:
+            case CardFunction.AddResource:
                 cardDescription = "Adds " + resourceAddOutput.Value.ToString() + " " + resourceAddOutput.Key.ToString() + "s every " + tickTime.ToString() + " seconds.";
                 break;
-            case CardFunction.convertResources:
+            case CardFunction.ConvertResources:
                 cardDescription = "Converts ";
                 break;
         }
+    }
+
+    private float Power(float value, float power)
+    {
+        if (power <= 1)
+        {
+            return value;
+        }
+        else
+        {
+            return Power(value, power - 1, value * value);
+        }
+    }
+    
+    private float Power(float originalValue, float power, float currentValue)
+    {
+        if (power <= 1)
+        {
+            return currentValue;
+        }
+        else
+        {
+            return Power(currentValue * originalValue, power - 1);
+        }
+    }
+
+    private void AddResources()
+    {
+        Counter.AddResource(resourceAddOutput.Key, resourceAddOutput.Value);
+    }
+
+    private void ConvertResources()
+    {
+        foreach (KeyValuePair<Resource, int> resourceInput in resourceConvertInput)
+        {
+            Counter.AddResource(resourceInput.Key, resourceInput.Value);
+        }
+        Counter.AddResource(resourceConvertOutput.Key, resourceConvertOutput.Value);
     }
 
     private void PerformFunciton()
     {
         switch (cardFunction)
         {
-            case CardFunction.addResource:
+            case CardFunction.AddResource:
                 AddResources();
                 break;
-            case CardFunction.convertResources:
+            case CardFunction.ConvertResources:
                 ConvertResources();
                 break;
         }
@@ -134,11 +135,15 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        timer += Time.fixedDeltaTime;
-        if (timer >= tickTime)
+        if (active)
         {
-            PerformFunciton();
-            timer = 0;
+            timer += Time.fixedDeltaTime;
+            if (timer >= tickTime)
+            {
+                PerformFunciton();
+                timer = 0;
+            }
         }
+
     }
 }
