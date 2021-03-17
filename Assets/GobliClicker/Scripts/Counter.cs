@@ -4,13 +4,13 @@ using UnityEngine;
 
 public enum Resource
 {
-    click,
-    red,
-    orange,
-    yellow,
-    green,
-    blue,
-    violet,
+    Gobli,
+    Red,
+    Orange,
+    Yellow,
+    Green,
+    Blue,
+    Violet,
     None
 }
 
@@ -18,6 +18,9 @@ public class Counter : MonoBehaviour
 {
     public static Dictionary<Resource, int> counter = new Dictionary<Resource, int>();
     public static Dictionary<Resource, List<float>> resourcesInLastSecond = new Dictionary<Resource, List<float>>();
+
+    int clickAmount = 1;
+    //public static Dictionary<Resource, int> clickAmounts = new Dictionary<Resource, int>();
 
     //    private static List<float> clicksInLastSecond = new List<float>(); //stores a list of floats representing timers that represent the age of clicks made in the last second
 
@@ -58,4 +61,39 @@ public class Counter : MonoBehaviour
         }
 
     }
+    public void ButtonAddGobli()
+    {
+        AddResource(Resource.Gobli, clickAmount);
+    }
+
+    public void ButtonAddRed()
+    {
+        AddResource(Resource.Red, clickAmount);
+    }
+
+    public void ButtonAddOrange()
+    {
+        AddResource(Resource.Orange, clickAmount);
+    }
+
+    public void ButtonAddYellow()
+    {
+        AddResource(Resource.Yellow, clickAmount);
+    }
+    
+    public void ButtonAddGreen()
+    {
+        AddResource(Resource.Green, clickAmount);
+    }
+    
+    public void ButtonAddBlue()
+    {
+        AddResource(Resource.Blue, clickAmount);
+    }
+
+    public void ButtonAddViolet()
+    {
+        AddResource(Resource.Violet, clickAmount);
+    }
+
 }
