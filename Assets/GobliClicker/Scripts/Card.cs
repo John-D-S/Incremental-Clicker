@@ -10,8 +10,8 @@ public enum CardFunction
 
 public class Card
 {
-    private bool active = false;//the card is inactive before being purchased
-    private Dictionary<Resource, int> purchaseCost; //the resources and the number of them that it costs to purchase this card.
+    public bool activated = false;//the card is inactive before being purchased
+    public Dictionary<Resource, int> purchaseCost; //the resources and the number of them that it costs to purchase this card.
     private int cardLevel;
 
     private string cardName;
@@ -61,7 +61,7 @@ public class Card
         resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Random.Range(0, 3));
         
         //ResourceConvert function
-        resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.5f)));
+        resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f)));
         resourceConvertInput = new Dictionary<Resource, int>();
         int resourceConvertInputNumber = Random.Range(1, 4);
         for (int i = 0; i < resourceConvertInputNumber; i++)
@@ -93,7 +93,7 @@ public class Card
                         cardDescription += $" and {InputItem.Value} {InputItem.Key}";
                     }
                 }
-                cardDescription += $" into {resourceConvertOutput.Value} {resourceConvertOutput.Key}.";
+                cardDescription += $" into {resourceConvertOutput.Value} {resourceConvertOutput.Key} every {tickTime} seconds.";
 
                 break;
         }
@@ -129,11 +129,23 @@ public class Card
 
     private void ConvertResources()
     {
+        bool canConvert = true;
         foreach (KeyValuePair<Resource, int> resourceInput in resourceConvertInput)
         {
-            Counter.AddResource(resourceInput.Key, resourceInput.Value);
+            if (resourceInput.Value > Counter.counter[resourceInput.Key])//if the resources required to convert is greater than the amount of that resource owned, you cannot convert.
+            {
+                canConvert = false;
+            }
         }
-        Counter.AddResource(resourceConvertOutput.Key, resourceConvertOutput.Value);
+        if (canConvert)
+        {
+            foreach (KeyValuePair<Resource, int> resourceInput in resourceConvertInput)
+            {
+                Counter.AddResource(resourceInput.Key, -resourceInput.Value);
+            }
+            Counter.AddResource(resourceConvertOutput.Key, resourceConvertOutput.Value);
+        }
+        
     }
 
     private void PerformFunciton()
@@ -150,9 +162,9 @@ public class Card
     }
 
     // Update is called once per frame
-    void UpdateCard()
+    public void UpdateCard()
     {
-        if (active)
+        if (activated)
         {
             timer += Time.fixedDeltaTime;
             if (timer >= tickTime)

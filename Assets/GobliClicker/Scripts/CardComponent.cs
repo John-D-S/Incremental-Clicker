@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class CardComponent : MonoBehaviour
 {
-    private Card card;
-    
+    [System.NonSerialized]
+    public Card card;
     private int level;
     public int Level
     {
@@ -20,15 +23,16 @@ public class CardComponent : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private TextMeshProUGUI cardName;
+    [SerializeField]
+    private TextMeshProUGUI cardDescription;
+    public TextMeshProUGUI cardCost;
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        card.UpdateCard();
     }
 }

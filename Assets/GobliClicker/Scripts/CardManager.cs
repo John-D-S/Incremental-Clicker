@@ -5,13 +5,42 @@ using UnityEngine;
 //this manages both the shop and the active cards
 public class CardManager : MonoBehaviour
 {
+    [SerializeField] // ask james if you can specify whether you want a prefab or a gameobject from the scene
+    private GameObject shopEntryPrefab;
     [SerializeField]
-    private GameObject Shop;
+    private GameObject cardPrefab;
+
+
     [SerializeField]
-    private GameObject ActiveCards;
+    private Transform activeCardHolder;
 
     private List<CardComponent> shopCards = new List<CardComponent>();
     private List<CardComponent> activeCards = new List<CardComponent>();
+
+    //
+    public void AttemptBuyCard(GameObject cardGameObjectToBuy)
+    {
+        if (cardGameObjectToBuy.transform.parent.tag == "Shop")//you can only buy a card if it is in the shop.
+        {
+            bool canBuyCard = true;
+            CardComponent cardToBuy = cardGameObjectToBuy.GetComponent<CardComponent>();
+            foreach (KeyValuePair<Resource, int> cost in cardToBuy.card.purchaseCost)
+            {
+                if (Counter.counter[cost.Key] < cost.Value)
+                {
+                    canBuyCard = false;
+                }
+            }
+            if (canBuyCard)
+            {
+                int cardLevel = cardToBuy.Level;
+                GameObject boughtCard = Instantiate<GameObject>(cardGameObjectToBuy, activeCardHolder);
+                boughtCard.GetComponent<CardComponent>().card.activated = true;
+                boughtCard.GetComponent<CardComponent>().cardCost.enabled = false;
+                cardToBuy.Level = cardLevel;//Setting this will randomize the card.
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
