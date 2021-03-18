@@ -5,14 +5,10 @@ using UnityEngine;
 //this manages both the shop and the active cards
 public class CardManager : MonoBehaviour
 {
-    [SerializeField] // ask james if you can specify whether you want a prefab or a gameobject from the scene
-    private GameObject shopEntryPrefab;
-    [SerializeField]
-    private GameObject cardPrefab;
-
-
-    [SerializeField]
+    [SerializeField] // ask if you can specify wether you want a prefab or an instance from the scene.
     private Transform activeCardHolder;
+    [SerializeField]
+    private Transform shopCardHolder;
 
     private List<CardComponent> shopCards = new List<CardComponent>();
     private List<CardComponent> activeCards = new List<CardComponent>();
@@ -40,6 +36,16 @@ public class CardManager : MonoBehaviour
                 cardToBuy.Level = cardLevel;//Setting this will randomize the card.
             }
         }
+    }
+
+    public void AddNewCardForSale()
+    {
+
+    }
+
+    public void RegenerateCardsForSale()
+    {
+
     }
 
     // Start is called before the first frame update
