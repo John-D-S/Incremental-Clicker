@@ -1,20 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 //this manages both the shop and the active cards
 public class CardManager : MonoBehaviour
 {
-    [SerializeField] // ask if you can specify wether you want a prefab or an instance from the scene.
-    private Transform activeCardHolder;
     [SerializeField]
-    private Transform shopCardHolder;
+    private GameObject CardPrefab;
 
-    private List<CardComponent> shopCards = new List<CardComponent>();
-    private List<CardComponent> activeCards = new List<CardComponent>();
+    [SerializeField] // ask if you can specify wether you want a prefab or an instance from the scene.
+    private RectTransform activeCardHolder;
+    [SerializeField]
+    private RectTransform shopCardHolder;
 
-    //
-    public void AttemptBuyCard(GameObject cardGameObjectToBuy)
+    private static int newShopCost = 10;
+    private static int newShopLevel = 1;
+    private static int regenerateShopCost = 50;
+    [SerializeField]
+    private TextMeshProUGUI newShopCostText;
+    [SerializeField]
+    private TextMeshProUGUI regenerateShopCostText;
+
+    private static List<CardComponent> shopCards = new List<CardComponent>();
+    private static List<CardComponent> activeCards = new List<CardComponent>();
+
+    private static CardManager mainCardManager; //this exists so that I can reference serialized fields in static methods
+
+    private void Start()
+    {
+        mainCardManager = gameObject.GetComponent<CardManager>();
+        newShopCostText.text = newShopCost.ToString();
+        regenerateShopCostText.text = regenerateShopCost.ToString();
+    }
+
+    public static void AttemptBuyCard(GameObject cardGameObjectToBuy)
     {
         if (cardGameObjectToBuy.transform.parent.tag == "Shop")//you can only buy a card if it is in the shop.
         {
@@ -29,34 +49,53 @@ public class CardManager : MonoBehaviour
             }
             if (canBuyCard)
             {
-                int cardLevel = cardToBuy.Level;
-                GameObject boughtCard = Instantiate<GameObject>(cardGameObjectToBuy, activeCardHolder);
-                boughtCard.GetComponent<CardComponent>().card.activated = true;
-                boughtCard.GetComponent<CardComponent>().cardCost.enabled = false;
-                cardToBuy.Level = cardLevel;//Setting this will randomize the card.
+                foreach (KeyValuePair<Resource, int> cost in cardToBuy.card.purchaseCost)
+                {
+                    Counter.counter[cost.Key] -= cost.Value;
+                }
+                int cardLevel = cardToBuy.card.cardLevel;
+                
+                Instantiate(cardGameObjectToBuy, mainCardManager.activeCardHolder);
+                CardComponent boughtCard = mainCardManager.activeCardHolder.GetChild(mainCardManager.activeCardHolder.childCount - 1).GetComponent<CardComponent>();
+                boughtCard.card = cardGameObjectToBuy.GetComponent<CardComponent>().card;
+                boughtCard.card.activated = true;
+                boughtCard.cardCost.enabled = false;
+                cardToBuy.RandomizeCard(cardLevel + 1);//Setting this will randomize the card.
             }
         }
     }
 
-    public void AddNewCardForSale()
+    public static void RefreshShopCards()
     {
+        if (Counter.counter[Resource.Gobli] >= regenerateShopCost)
+        {
+            foreach (CardComponent cardComponent in shopCards)
+            {
+                int level = cardComponent.level;
+                cardComponent.RandomizeCard(level);
+            }
+            Counter.counter[Resource.Gobli] -= regenerateShopCost;
+            regenerateShopCost = Mathf.RoundToInt(regenerateShopCost * 1.5f);
+            mainCardManager.regenerateShopCostText.text = regenerateShopCost.ToString();
+        }
 
     }
 
-    public void RegenerateCardsForSale()
+    public static void AddNewCardForSale()
     {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-            
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (Counter.counter[Resource.Gobli] >= newShopCost)
+        {
+            Instantiate(mainCardManager.CardPrefab, mainCardManager.shopCardHolder);
+            //sets the new card as the second last in the hierarchy to keep the new card and refresh cards buttons at the end of the shop.
+            Transform newCard = mainCardManager.shopCardHolder.GetChild(mainCardManager.shopCardHolder.childCount - 1);
+            newCard.SetSiblingIndex(newCard.transform.parent.hierarchyCount - 2);
+            CardComponent newCardComponent = newCard.GetComponentInChildren<CardComponent>();
+            shopCards.Add(newCardComponent);
+            newCardComponent.RandomizeCard(newShopLevel);
+            newShopLevel++;
+            Counter.counter[Resource.Gobli] -= newShopCost;
+            newShopCost *= 2;
+            mainCardManager.newShopCostText.text = newShopCost.ToString();
+        }
     }
 }

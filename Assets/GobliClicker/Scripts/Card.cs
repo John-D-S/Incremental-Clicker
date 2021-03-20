@@ -9,18 +9,20 @@ public enum CardFunction
 }
 
 public class Card
-{
+{    
     public bool activated = false;//the card is inactive before being purchased
-    public Dictionary<Resource, int> purchaseCost; //the resources and the number of them that it costs to purchase this card.
-    private int cardLevel;
+    public Dictionary<Resource, int> purchaseCost = new Dictionary<Resource, int>(); //the resources and the number of them that it costs to purchase this card.
+    public string PurchaseCostWords { get; }
+    
+    public int cardLevel = 1;
 
-    private string cardName;
-    private string cardDescription = "";
+    public string CardName { get; }
+    public string CardDescription { get; } = "";
 
     private CardFunction cardFunction;//this describes what this card does
 
-    private float timer;
-    private float tickTime;//time to complete the cardFunction
+    public float timer;
+    public float TickTime { get; }//time to complete the cardFunction
 
     //variables for addResources()
     private KeyValuePair<Resource, int> resourceAddOutput;
@@ -31,6 +33,7 @@ public class Card
 
     public Card(int _cardLevel)
     {
+        
         //setting the card's cardLevel
         cardLevel = _cardLevel;
         
@@ -44,8 +47,11 @@ public class Card
             }
             else
             {
-                Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(CardFunction)).Length - 1); //the 1 at the beginning of random.range is to exclude Click as a resource and the - 1 at the end is to exclude None
-                purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(1.5f, (float)cardLevel * 0.25f) * Random.Range(20, 30)));
+                Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1); //the 1 at the beginning of random.range is to exclude Click as a resource and the - 1 at the end is to exclude None
+                if (!purchaseCost.ContainsKey(randomResource))
+                {
+                    purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.5f) * Random.Range(10, 30)));
+                }
             }
         }
         
@@ -53,50 +59,80 @@ public class Card
         cardFunction = (CardFunction)Random.Range(0, CardFunction.GetNames(typeof(CardFunction)).Length);//assigning a random enum from CardFunction to cardFunction
 
         //setting the time it takes to complete one tick of the card's function.
-        tickTime = Random.Range(10, 50) / cardLevel;
+        TickTime = Random.Range(25f, 50f) / (cardLevel + 1) / 2f + 1;
 
-        //setting the values for the card's functions (I'm setting even the ones I'm not using for reasons I can't remember)
+        //setting the values for the card's functions
 
         //addResource function
-        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Random.Range(0, 3));
+        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));
         
         //ResourceConvert function
-        resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f)));
         resourceConvertInput = new Dictionary<Resource, int>();
-        int resourceConvertInputNumber = Random.Range(1, 4);
+        int resourceConvertInputNumber = Random.Range(1, 4);//the number of resources going in
         for (int i = 0; i < resourceConvertInputNumber; i++)
         {
-            resourceConvertInput.Add((Resource)Random.Range(0, Resource.GetNames(typeof(CardFunction)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));
+            KeyValuePair<Resource, int> resourceToAdd = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));
+            if (!resourceConvertInput.ContainsKey(resourceToAdd.Key))
+            {
+                resourceConvertInput.Add(resourceToAdd.Key, resourceToAdd.Value);
+            }
+        }
+        resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+
+        //setting the name
+        switch (cardFunction)
+        {
+            case CardFunction.AddResource:
+                CardName = $"Add {resourceAddOutput.Key}";
+                break;
+            case CardFunction.ConvertResources:
+                CardName = $"Convert to {resourceConvertOutput.Key}";
+                break;
+            default:
+                break;
         }
 
         //setting the description
         switch (cardFunction)
         {
             case CardFunction.AddResource:
-                cardDescription = "Adds " + resourceAddOutput.Value.ToString() + " " + resourceAddOutput.Key.ToString() + "s every " + tickTime.ToString() + " seconds.";
+                CardDescription = $"Adds {resourceAddOutput.Value} {resourceAddOutput.Key} every {Mathf.RoundToInt(TickTime * 10) * 0.1f} seconds.";
                 break;
             case CardFunction.ConvertResources:
                 int i = 0;
-                cardDescription = "Converts ";
+                CardDescription = "Converts ";
                 foreach (KeyValuePair<Resource, int> InputItem in resourceConvertInput)
                 {
                     if (i == 0)
                     {
-                        cardDescription += $"{InputItem.Value} {InputItem.Key}";
+                        CardDescription += $"{InputItem.Value} {InputItem.Key}";
                     }
                     else if (i < resourceConvertInput.Count - 1)
                     {
-                        cardDescription += $", {InputItem.Value} {InputItem.Key}";
+                        CardDescription += $", {InputItem.Value} {InputItem.Key}";
                     }
                     else if (i == resourceConvertInput.Count - 1)
                     {
-                        cardDescription += $" and {InputItem.Value} {InputItem.Key}";
+                        CardDescription += $" and {InputItem.Value} {InputItem.Key}";
                     }
+                    i++;
                 }
-                cardDescription += $" into {resourceConvertOutput.Value} {resourceConvertOutput.Key} every {tickTime} seconds.";
-
+                CardDescription += $" into {resourceConvertOutput.Value} {resourceConvertOutput.Key} every {Mathf.RoundToInt(TickTime * 10) * 0.1f} seconds.";
                 break;
         }
+
+        //setting the worded cost of the card to purchase
+        int resourceNumber = 0;
+        foreach (KeyValuePair<Resource, int> resourceCost in purchaseCost)
+        {
+            if (resourceNumber > 0)
+            {
+                PurchaseCostWords += ", ";
+            }
+            PurchaseCostWords += $"{resourceCost.Value} {resourceCost.Key}";
+            resourceNumber++;
+        }
+        Debug.Log("randomized card");
     }
 
     private float Power(float value, float power)
@@ -167,7 +203,8 @@ public class Card
         if (activated)
         {
             timer += Time.fixedDeltaTime;
-            if (timer >= tickTime)
+            Debug.Log(TickTime);
+            if (timer >= TickTime)
             {
                 PerformFunciton();
                 timer = 0;

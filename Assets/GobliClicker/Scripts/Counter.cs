@@ -8,12 +8,12 @@ using UnityEngine.UI;
 public enum Resource
 {
     Gobli,
-    Red,
-    Orange,
-    Yellow,
-    Green,
-    Blue,
-    Violet,
+    Choblex,
+    Hoink,
+    Yoswhal,
+    Qumdo,
+    Lombert,
+    Vook,
     None
 }
 
@@ -88,10 +88,10 @@ public class Counter : MonoBehaviour
 
     //a list of all the functions that the clickerButtons call
     public void ButtonAddGobli() => AddResource(Resource.Gobli, clickAmount);
-    public void ButtonAddRed() => AddResource(Resource.Red, clickAmount);
-    public void ButtonAddOrange() => AddResource(Resource.Orange, clickAmount);
-    public void ButtonAddYellow() => AddResource(Resource.Yellow, clickAmount);
-    public void ButtonAddGreen() => AddResource(Resource.Green, clickAmount);
-    public void ButtonAddBlue() => AddResource(Resource.Blue, clickAmount);
-    public void ButtonAddViolet() => AddResource(Resource.Violet, clickAmount);
+    public void ButtonAddRed() => AddResource(Resource.Choblex, clickAmount);
+    public void ButtonAddOrange() => AddResource(Resource.Hoink, clickAmount);
+    public void ButtonAddYellow() => AddResource(Resource.Yoswhal, clickAmount);
+    public void ButtonAddGreen() => AddResource(Resource.Qumdo, clickAmount);
+    public void ButtonAddBlue() => AddResource(Resource.Lombert, clickAmount);
+    public void ButtonAddViolet() => AddResource(Resource.Vook, clickAmount);
 }
