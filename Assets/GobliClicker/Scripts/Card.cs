@@ -43,14 +43,14 @@ public class Card
         {
             if (i == 0)
             {
-                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(1.5f, (float)cardLevel * 0.25f) * Random.Range(20, 30)));//this should be changed to balance the price of the card with it's level
+                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.6f) * Random.Range(5, 10)));//this should be changed to balance the price of the card with it's level
             }
             else
             {
                 Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1); //the 1 at the beginning of random.range is to exclude Click as a resource and the - 1 at the end is to exclude None
                 if (!purchaseCost.ContainsKey(randomResource))
                 {
-                    purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.5f) * Random.Range(10, 30)));
+                    purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.5f) * Random.Range(4, 9)));
                 }
             }
         }
@@ -64,7 +64,7 @@ public class Card
         //setting the values for the card's functions
 
         //addResource function
-        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));
+        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));//you cannot add Gobli
         
         //ResourceConvert function
         resourceConvertInput = new Dictionary<Resource, int>();
@@ -77,7 +77,16 @@ public class Card
                 resourceConvertInput.Add(resourceToAdd.Key, resourceToAdd.Value);
             }
         }
-        resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+        //there is a 1 in 3 chance that the convert output will be gobli
+        bool convertsToGobli = (Random.Range(0, 3) == 0);
+        if (convertsToGobli)
+        {
+            resourceConvertOutput = new KeyValuePair<Resource, int>(Resource.Gobli, resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+        }
+        else
+        {
+            resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+        }
 
         //setting the name
         switch (cardFunction)

@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 66535680}
   - component: {fileID: 66535679}
   m_Layer: 5
-  m_Name: Yellow Button
+  m_Name: Yoswhal Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddYellow
+        m_MethodName: ButtonAddYoswhal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1170,7 +1170,7 @@ GameObject:
   - component: {fileID: 468375697}
   - component: {fileID: 468375696}
   m_Layer: 5
-  m_Name: Blue Button
+  m_Name: Lombert Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1242,7 +1242,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddBlue
+        m_MethodName: ButtonAddLombert
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2546,7 +2546,7 @@ GameObject:
   - component: {fileID: 1081071215}
   - component: {fileID: 1081071214}
   m_Layer: 5
-  m_Name: Green Button
+  m_Name: Qumdo Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2618,7 +2618,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddGreen
+        m_MethodName: ButtonAddQumdo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3978,7 +3978,7 @@ GameObject:
   - component: {fileID: 1702369122}
   - component: {fileID: 1702369121}
   m_Layer: 5
-  m_Name: Violet Button
+  m_Name: Vook Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4050,7 +4050,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddViolet
+        m_MethodName: ButtonAddVook
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4196,7 +4196,7 @@ GameObject:
   - component: {fileID: 1731253641}
   - component: {fileID: 1731253640}
   m_Layer: 5
-  m_Name: Orange Button
+  m_Name: Hoink Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4268,7 +4268,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddOrange
+        m_MethodName: ButtonAddHoink
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4365,7 +4365,7 @@ GameObject:
   - component: {fileID: 1952863062}
   - component: {fileID: 1952863061}
   m_Layer: 5
-  m_Name: Red Button
+  m_Name: Choblex Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4437,7 +4437,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddRed
+        m_MethodName: ButtonAddChoblex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
