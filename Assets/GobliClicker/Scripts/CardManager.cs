@@ -30,8 +30,8 @@ public class CardManager : MonoBehaviour
     private void Start()
     {
         mainCardManager = gameObject.GetComponent<CardManager>();
-        newShopCostText.text = newShopCost.ToString();
-        regenerateShopCostText.text = regenerateShopCost.ToString();
+        newShopCostText.text = $"{newShopCost} Gobli";
+        regenerateShopCostText.text = $"{regenerateShopCost} Gobli";
     }
 
     public static void AttemptBuyCard(GameObject cardGameObjectToBuy)
@@ -76,7 +76,7 @@ public class CardManager : MonoBehaviour
             }
             Counter.counter[Resource.Gobli] -= regenerateShopCost;
             regenerateShopCost = Mathf.RoundToInt(regenerateShopCost * 1.5f);
-            mainCardManager.regenerateShopCostText.text = regenerateShopCost.ToString();
+            mainCardManager.regenerateShopCostText.text = $"{regenerateShopCost} Gobli";
         }
 
     }
@@ -95,7 +95,7 @@ public class CardManager : MonoBehaviour
             newShopLevel++;
             Counter.counter[Resource.Gobli] -= newShopCost;
             newShopCost *= 2;
-            mainCardManager.newShopCostText.text = newShopCost.ToString();
+            mainCardManager.newShopCostText.text = $"{newShopCost} Gobli";
         }
     }
 }

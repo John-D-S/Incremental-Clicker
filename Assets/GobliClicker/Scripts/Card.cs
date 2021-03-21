@@ -59,7 +59,7 @@ public class Card
         cardFunction = (CardFunction)Random.Range(0, CardFunction.GetNames(typeof(CardFunction)).Length);//assigning a random enum from CardFunction to cardFunction
 
         //setting the time it takes to complete one tick of the card's function.
-        TickTime = Random.Range(25f, 50f) / (cardLevel + 1) / 2f + 1;
+        TickTime = Random.Range(25f, 50f) / (cardLevel + 1) / 2f + 0.05f;
 
         //setting the values for the card's functions
 
@@ -71,7 +71,7 @@ public class Card
         int resourceConvertInputNumber = Random.Range(1, 4);//the number of resources going in
         for (int i = 0; i < resourceConvertInputNumber; i++)
         {
-            KeyValuePair<Resource, int> resourceToAdd = new KeyValuePair<Resource, int>((Resource)Random.Range(0, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));
+            KeyValuePair<Resource, int> resourceToAdd = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));//gobli cannot be an input
             if (!resourceConvertInput.ContainsKey(resourceToAdd.Key))
             {
                 resourceConvertInput.Add(resourceToAdd.Key, resourceToAdd.Value);
