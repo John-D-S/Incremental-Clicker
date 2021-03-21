@@ -141,7 +141,6 @@ public class Card
             PurchaseCostWords += $"{resourceCost.Value} {resourceCost.Key}";
             resourceNumber++;
         }
-        Debug.Log("randomized card");
     }
 
     private float Power(float value, float power)
