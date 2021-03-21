@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public enum Resource
 {
-    Gobli,
+    Yoswhal,
     Choblex,
     Hoink,
-    Yoswhal,
+    Gobli,
     Qumdo,
     Lombert,
     Vook,
@@ -34,7 +34,7 @@ public class Counter : MonoBehaviour
     int clickAmount = 1;
 
     //ideally this would be a dictionary but you can't serialize dictionaries. it works fine
-    [SerializeField, Tooltip("These TMP Texts need to be put in here in the order that the resources have in the enum; Gobli, R, O, Y, G, B, V")]
+    [SerializeField, Tooltip("These TMP Texts need to be put in here in the order that the resources have in the enum; Yoswhal, Choblex, Hoink, Gobli, Qumdo, Lombert, Vook.")]
     private List<TextMeshProUGUI> buttonTexts = new List<TextMeshProUGUI>(7);
 
     //Adds an amount of a resource such that the resourcesPerSecond is effected
@@ -88,10 +88,10 @@ public class Counter : MonoBehaviour
     }
 
     //all these functions are called by the clicker buttons.
-    public void ButtonAddGobli() => AddResource(Resource.Gobli, clickAmount);
+    public void ButtonAddYoswhal() => AddResource(Resource.Yoswhal, clickAmount);
     public void ButtonAddChoblex() => AddResource(Resource.Choblex, clickAmount);
     public void ButtonAddHoink() => AddResource(Resource.Hoink, clickAmount);
-    public void ButtonAddYoswhal() => AddResource(Resource.Yoswhal, clickAmount);
+    public void ButtonAddGobli() => AddResource(Resource.Gobli, clickAmount);
     public void ButtonAddQumdo() => AddResource(Resource.Qumdo, clickAmount);
     public void ButtonAddLombert() => AddResource(Resource.Lombert, clickAmount);
     public void ButtonAddVook() => AddResource(Resource.Vook, clickAmount);

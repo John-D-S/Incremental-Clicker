@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 66535680}
   - component: {fileID: 66535679}
   m_Layer: 5
-  m_Name: Yoswhal Button
+  m_Name: Gobli Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -476,7 +476,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddYoswhal
+        m_MethodName: ButtonAddGobli
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5216,7 +5216,7 @@ GameObject:
   - component: {fileID: 2011461200}
   - component: {fileID: 2011461199}
   m_Layer: 5
-  m_Name: Gobli Button
+  m_Name: Yoswhal Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5288,7 +5288,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1427303348}
         m_TargetAssemblyTypeName: Counter, Assembly-CSharp
-        m_MethodName: ButtonAddGobli
+        m_MethodName: ButtonAddYoswhal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

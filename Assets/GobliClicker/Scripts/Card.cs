@@ -57,7 +57,7 @@ public class Card
         int noOfResourcesRequiredToPurchase = Random.Range(1, 4);
         for (int i = 0; i < noOfResourcesRequiredToPurchase; i++)
         {
-            //gobli will always be part of the cost of the card.
+            //Yoswhal will always be part of the cost of the card.
             if (i == 0)
             {
                 //this balances the price of the card with its level
@@ -65,7 +65,7 @@ public class Card
             }
             else
             {
-                //the 1 at the beginning of random.range is to exclude Gobli as a resource, since it has already been added and the - 1 at the end is to exclude None
+                //the 1 at the beginning of random.range is to exclude Yoswhal as a resource, since it has already been added and the - 1 at the end is to exclude None
                 Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1);
                 //this if statement is to ensure that no more than one of a given resource is added to the cost
                 if (!purchaseCost.ContainsKey(randomResource))
@@ -92,24 +92,24 @@ public class Card
 
         //setting the values for the card's functions
         //setting the output resource for the addResource function
-        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));//you cannot add Gobli; you can only convert to it
+        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));//you cannot add Yoswhal; you can only convert to it
         
         //ResourceConvert function
         resourceConvertInput = new Dictionary<Resource, int>();
         int resourceConvertInputNumber = Random.Range(1, 4);//the number of resources going in
         for (int i = 0; i < resourceConvertInputNumber; i++)
         {
-            KeyValuePair<Resource, int> resourceToAdd = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));//gobli cannot be an input
+            KeyValuePair<Resource, int> resourceToAdd = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.25f)));//Yoswhal cannot be an input
             if (!resourceConvertInput.ContainsKey(resourceToAdd.Key))
             {
                 resourceConvertInput.Add(resourceToAdd.Key, resourceToAdd.Value);
             }
         }
-        //there is a 1 in 3 chance that the convert output will be gobli
-        bool convertsToGobli = (Random.Range(0, 3) == 0);
-        if (convertsToGobli)
+        //there is a 1 in 3 chance that the convert output will be Yoswhal
+        bool convertsToYoswhal = (Random.Range(0, 3) == 0);
+        if (convertsToYoswhal)
         {
-            resourceConvertOutput = new KeyValuePair<Resource, int>(Resource.Gobli, resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0.25f, cardLevel))));
+            resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)0, resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0.25f, cardLevel))));
         }
         else
         {

@@ -21,11 +21,11 @@ public class CardManager : MonoBehaviour
     [SerializeField]
     private RectTransform shopCardHolder;
 
-    // The cost in Gobli to add a new card to the shop
+    // The cost in Yoswhal to add a new card to the shop
     private static int newShopCost = 10;
     // what level the next card that is added to the shop will be
     private static int newShopLevel = 1;
-    // teh epic cost in Gobli to regenerate the cards in the shop.
+    // teh epic cost in Yoswhal to regenerate the cards in the shop.
     private static int regenerateShopCost = 50;
 
     // the TMPUGUI that displays the cost of adding a new card to the shop
@@ -47,8 +47,8 @@ public class CardManager : MonoBehaviour
         // sets the mainCardManager (there is only one card manager)
         mainCardManager = gameObject.GetComponent<CardManager>();
         // setting the GUI on the shop buttons to display the cost of a new card and the cost of regenerating all the current cards.
-        newShopCostText.text = $"{newShopCost} Gobli";
-        regenerateShopCostText.text = $"{regenerateShopCost} Gobli";
+        newShopCostText.text = $"{newShopCost} Yoswhal";
+        regenerateShopCostText.text = $"{regenerateShopCost} Yoswhal";
     }
 
     /// <summary>
@@ -96,12 +96,12 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Regenerates all the cards in the shop for the amount of Gobli in RegenerateShopCost
+    /// Regenerates all the cards in the shop for the amount of Yoswhal in RegenerateShopCost
     /// </summary>
     public static void RefreshShopCards()
     {
         //if the player can afford it
-        if (Counter.counter[Resource.Gobli] >= regenerateShopCost)
+        if (Counter.counter[(Resource)0] >= regenerateShopCost)
         {
             // Regenerate all the cards with cards of the same level.
             foreach (CardComponent cardComponent in shopCards)
@@ -110,11 +110,11 @@ public class CardManager : MonoBehaviour
                 cardComponent.RandomizeCard(level);
             }
             // take away the cost of regenerating the cards
-            Counter.counter[Resource.Gobli] -= regenerateShopCost;
+            Counter.counter[(Resource)0] -= regenerateShopCost;
             // calculate and set the new cost for regenerating the shop cards
             regenerateShopCost = Mathf.RoundToInt(regenerateShopCost * 1.5f);
             // update the text to display the correct regenerate cost.
-            mainCardManager.regenerateShopCostText.text = $"{regenerateShopCost} Gobli";
+            mainCardManager.regenerateShopCostText.text = $"{regenerateShopCost} Yoswhal";
         }
 
     }
@@ -125,7 +125,7 @@ public class CardManager : MonoBehaviour
     public static void AddNewCardForSale()
     {
         //check if the player can afford another card int hte shop card holder.
-        if (Counter.counter[Resource.Gobli] >= newShopCost)
+        if (Counter.counter[(Resource)0] >= newShopCost)
         {
             //add the card to the shopCardH
             Instantiate(mainCardManager.CardPrefab, mainCardManager.shopCardHolder);
@@ -140,11 +140,11 @@ public class CardManager : MonoBehaviour
             //add 1 to newShopLevel so the next time a AddNewCardForSale() (this function) is called, the new card will be 1 level higher.
             newShopLevel++;
             //take away the cost of newShopCost
-            Counter.counter[Resource.Gobli] -= newShopCost;
+            Counter.counter[(Resource)0] -= newShopCost;
             //multiply newShopCost by 2 so that it rises exponentially
             newShopCost *= 2;
             //refresh the text displaying the cost of adding a new card to the shop with correct information.
-            mainCardManager.newShopCostText.text = $"{newShopCost} Gobli";
+            mainCardManager.newShopCostText.text = $"{newShopCost} Yoswhal";
         }
     }
 }
