@@ -77,8 +77,7 @@ public class Card
 
         //setting the card's function
         //the chance that the card function will be add goes down as the level goes up such that it is more likely to get a convert card past level 5 than an add card.
-        float cardFunctionAddChance = Mathf.Pow(2f, -(float)cardLevel * 0.2f);
-        Debug.Log(cardFunctionAddChance);
+        float cardFunctionAddChance = Mathf.Pow(2f, -(float)cardLevel * 0.4f);
         if (Random.Range(0f, 1f) > cardFunctionAddChance)
         {
             cardFunction = CardFunction.ConvertResources;
