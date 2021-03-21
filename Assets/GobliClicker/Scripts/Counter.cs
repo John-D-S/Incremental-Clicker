@@ -28,7 +28,7 @@ public class Counter : MonoBehaviour
     // holds the change in resources in the last 10 seconds. used to find resources per second
     private Dictionary<Resource, int> resourceChange = new Dictionary<Resource, int>();
     // The main dictionary which holds the amount of all the resources. 
-    public static Dictionary<Resource, int> counter = new Dictionary<Resource, int>();
+    public static Dictionary<Resource, long> counter = new Dictionary<Resource, long>();
 
     //a currently unchanging variable that determines how much each click is worth.
     int clickAmount = 1;
