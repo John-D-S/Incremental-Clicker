@@ -8,21 +8,32 @@ public enum CardFunction
     ConvertResources
 }
 
+/// <summary>
+/// The class that contains all the data for a given card and performs the functions on the resources.
+/// </summary>
 public class Card
-{    
-    public bool activated = false;//the card is inactive before being purchased
-    public Dictionary<Resource, int> purchaseCost = new Dictionary<Resource, int>(); //the resources and the number of them that it costs to purchase this card.
-    public string PurchaseCostWords { get; }
+{
+    //the card is inactive before being purchased
+    public bool activated = false;
     
-    public int cardLevel = 1;
-
+    //the resources and the number of them that it costs to purchase this card.
+    public Dictionary<Resource, int> purchaseCost = new Dictionary<Resource, int>();
+    //The cost of the card as it will be displayed
+    public string PurchaseCostWords { get; }
+    //the name of the card as it will be displayed.
     public string CardName { get; }
+    //the card's description as it will be displayed.
     public string CardDescription { get; } = "";
 
-    private CardFunction cardFunction;//this describes what this card does
+    //this determines what this card does
+    private CardFunction cardFunction;
+    //the level of the card. Higher levels do more but also cost more.
+    public int cardLevel = 1;
 
+    //the variable that ticks up until it reaches TickTime
     public float timer;
-    public float TickTime { get; }//time to complete the cardFunction
+    //time to complete the cardFunction
+    public float TickTime { get; }
 
     //variables for addResources()
     private KeyValuePair<Resource, int> resourceAddOutput;
@@ -31,6 +42,10 @@ public class Card
     private Dictionary<Resource, int> resourceConvertInput;
     private KeyValuePair<Resource, int> resourceConvertOutput;
 
+    /// <summary>
+    /// The constructor randomizes the data with the given level when it is called.
+    /// </summary>
+    /// <param name="_cardLevel"></param>
     public Card(int _cardLevel)
     {
         
@@ -38,33 +53,47 @@ public class Card
         cardLevel = _cardLevel;
         
         //setting the purchaseCost of the card.
+        //the minimum number of resources in the price of the card is 1, and the max is 3
         int noOfResourcesRequiredToPurchase = Random.Range(1, 4);
         for (int i = 0; i < noOfResourcesRequiredToPurchase; i++)
         {
+            //gobli will always be part of the cost of the card.
             if (i == 0)
             {
-                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.6f) * Random.Range(5, 10)));//this should be changed to balance the price of the card with it's level
+                //this balances the price of the card with its level
+                purchaseCost.Add((Resource)0, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.6f) * Random.Range(5, 10)));
             }
             else
             {
-                Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1); //the 1 at the beginning of random.range is to exclude Click as a resource and the - 1 at the end is to exclude None
+                //the 1 at the beginning of random.range is to exclude Gobli as a resource, since it has already been added and the - 1 at the end is to exclude None
+                Resource randomResource = (Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1);
+                //this if statement is to ensure that no more than one of a given resource is added to the cost
                 if (!purchaseCost.ContainsKey(randomResource))
                 {
                     purchaseCost.Add(randomResource, Mathf.RoundToInt(Power(2f, (float)cardLevel * 0.5f) * Random.Range(4, 9)));
                 }
             }
         }
-        
+
         //setting the card's function
-        cardFunction = (CardFunction)Random.Range(0, CardFunction.GetNames(typeof(CardFunction)).Length);//assigning a random enum from CardFunction to cardFunction
+        //the chance that the card function will be add goes down as the level goes up such that it is more likely to get a convert card past level 5 than an add card.
+        float cardFunctionAddChance = Mathf.Pow(2f, -(float)cardLevel * 0.2f);
+        Debug.Log(cardFunctionAddChance);
+        if (Random.Range(0f, 1f) > cardFunctionAddChance)
+        {
+            cardFunction = CardFunction.ConvertResources;
+        }
+        else
+        {
+            cardFunction = CardFunction.AddResource;
+        }
 
         //setting the time it takes to complete one tick of the card's function.
         TickTime = Random.Range(25f, 50f) / (cardLevel + 1) / 2f + 0.05f;
 
         //setting the values for the card's functions
-
-        //addResource function
-        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));//you cannot add Gobli
+        //setting the output resource for the addResource function
+        resourceAddOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), cardLevel + Random.Range(0, 3));//you cannot add Gobli; you can only convert to it
         
         //ResourceConvert function
         resourceConvertInput = new Dictionary<Resource, int>();
@@ -81,11 +110,11 @@ public class Card
         bool convertsToGobli = (Random.Range(0, 3) == 0);
         if (convertsToGobli)
         {
-            resourceConvertOutput = new KeyValuePair<Resource, int>(Resource.Gobli, resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+            resourceConvertOutput = new KeyValuePair<Resource, int>(Resource.Gobli, resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0.25f, cardLevel))));
         }
         else
         {
-            resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0, cardLevel * 0.75f))));
+            resourceConvertOutput = new KeyValuePair<Resource, int>((Resource)Random.Range(1, Resource.GetNames(typeof(Resource)).Length - 1), resourceConvertInputNumber * (cardLevel + Mathf.RoundToInt(Random.Range(0.25f, cardLevel))));
         }
 
         //setting the name
@@ -143,6 +172,9 @@ public class Card
         }
     }
 
+    /// <summary>
+    /// I didn't know that Mathf.Pow existed.
+    /// </summary>
     private float Power(float value, float power)
     {
         if (power <= 1)
@@ -166,11 +198,17 @@ public class Card
         }
     }
 
+    /// <summary>
+    /// The function for if the cardFunction is CardFunction.AddResources
+    /// </summary>
     private void AddResources()
     {
         Counter.AddResource(resourceAddOutput.Key, resourceAddOutput.Value);
     }
-
+    
+    /// <summary>
+    /// The function for if the cardFunction is CardFunction.ConvertResources
+    /// </summary>
     private void ConvertResources()
     {
         bool canConvert = true;
@@ -192,6 +230,9 @@ public class Card
         
     }
 
+    /// <summary>
+    /// Tells the card to do it's thing.
+    /// </summary>
     private void PerformFunciton()
     {
         switch (cardFunction)
@@ -208,6 +249,7 @@ public class Card
     // Update is called once per frame
     public void UpdateCard()
     {
+        //if the card has been purchased, the timer ticks up and the card performs its function each time the timer reaches TickTime.
         if (activated)
         {
             timer += Time.fixedDeltaTime;
