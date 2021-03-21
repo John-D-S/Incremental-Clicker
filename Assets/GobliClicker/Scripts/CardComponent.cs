@@ -26,7 +26,6 @@ public class CardComponent : MonoBehaviour
 
     public void RandomizeCard(int _level)
     {
-        Debug.Log("this card should be randomized");
         level = _level;
         card = new Card(level);
         ResetGui();

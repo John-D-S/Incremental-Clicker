@@ -211,7 +211,6 @@ public class Card
         if (activated)
         {
             timer += Time.fixedDeltaTime;
-            Debug.Log(TickTime);
             if (timer >= TickTime)
             {
                 PerformFunciton();
